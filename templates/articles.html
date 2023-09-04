@@ -1,0 +1,79 @@
+{% extends "layout.html" %}
+{% block body %}
+
+<div class="row">
+    <div class="col-md-6 offset-md-3">
+<br>
+<head>
+    <title>Makaleler</title>
+</head>
+<body>
+<div class ="row">
+    <div class="col-md-10 offset-md-3">
+        <div class="col-lg-8">
+            <form >
+    {% csrf_token %}
+    <input type="text" name = "anahtar" class="input-sm" maxlength="64" placeholder="Makale Ara...">
+    <button type="submit" class="btn btn-danger">Ara</button>
+</form>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+    <ul>
+        {% for article in articles %}
+        <!-- Page content-->
+        <div class="container mt-5">
+            <div class="row">
+                <div class="col-lg-8">
+                    <!-- Post content-->
+                    <article>
+                        <!-- Post header-->
+                        <header class="mb-4">
+                            <!-- Post title-->
+                            <h1 class="fw-bolder mb-1"><a href="/article/{{article.id}}">{{ article.title }}</h1></a>
+                            <hr>
+                            <!-- Post meta content-->
+                            <div class="text-muted fst-normal mb-2">{{ article.author.username }} tarafından {{ article.created_date }} tarihinde oluşturuldu.  </div>
+                            <!-- Post categories-->
+                            <hr>
+                        </header>
+                       
+                    </article>
+                </div>
+            </div>
+        </div>
+        {% empty %} <!-- herhangi bir değer yoksa mesaj döndürmeye yarar-->
+        <br>
+        <div id="myAlert" class="alert alert-danger">Kayıtlı Makale Bulunmuyor</div>
+
+<script>
+    // Mesajı belirli bir süre sonra otomatik olarak kaldır
+    setTimeout(function() {
+        var myAlert = document.getElementById('myAlert');
+        if (myAlert) {
+            myAlert.style.display = 'none';
+        }
+    }, 1000); // 1000 milisaniye (1 saniye)
+</script>
+
+        {% if user.is_authenticated %}
+        <a href="/addarticle" style="text-decoration: none">Makale Oluşturmak ister misiniz?</a>
+        {% else %} <!-- burada javascript kodu kullanarak makale eklemek isteyen kişinin giriş kontrolü sağlanıp eğer kullanıcı girişi yoksa önce giriş yapın mesajı yayınlar-->
+    <a href="javascript:void(0);" id="login-alert" style="text-decoration: none">Makale Oluşturmak İster Misiniz?</a>
+{% endif %}
+
+<script>
+document.getElementById('login-alert').addEventListener('click', function() {
+    alert('Önce giriş yapınız.');
+    window.location.href = '/user/login'; // Kullanıcıyı giriş yapma sayfasına yönlendir
+});
+</script>
+        {% endfor %}
+    </ul>
+</body>
+
+{% endblock body %}
+
