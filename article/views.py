@@ -14,13 +14,18 @@ def about(request):
 
 def articles(request):
     anahtar = request.GET.get("anahtar")
-
-    if anahtar:
-        articles= Article.objects.filter(title__icontains = anahtar)
-        return render(request,"articles.html",{"articles":articles})
+    selected_category = request.GET.get('category')
+    
     articles = Article.objects.all()
 
-    return render(request,"articles.html",{"articles":articles})
+    if anahtar:
+        articles = articles.filter(title__icontains=anahtar)
+
+    if selected_category and selected_category != 'Hepsi':
+        articles = articles.filter(category=selected_category)
+
+    return render(request, "articles.html", {"articles": articles})
+
 @login_required
 def dashboard(request):
     articles=Article.objects.filter(author=request.user)
@@ -80,6 +85,10 @@ def comment(request,id):
 
         newComment.save()
     return redirect("detail",id=id)
+
+
+def article_list(request):
+   pass
 
 
 
