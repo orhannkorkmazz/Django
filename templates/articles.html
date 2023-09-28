@@ -12,9 +12,23 @@
     <div class="col-md-10 offset-md-3">
         <div class="col-lg-8">
             <form >
+                <form method="get">
     {% csrf_token %}
     <input type="text" name = "anahtar" class="input-sm" maxlength="64" placeholder="Makale Ara...">
     <button type="submit" class="btn btn-danger">Ara</button>
+    <div>
+        <select name="category">
+            <option value="" {% if request.GET.category == "" %}selected{% endif %}>Hepsi</option>
+            <option value="Bilişim" {% if request.GET.category == "Bilişim" %}selected{% endif %}>Bilişim</option>
+            <option value="Eğitim" {% if request.GET.category == "Eğitim" %}selected{% endif %}>Eğitim</option>
+            <option value="Edebi" {% if request.GET.category == "Edebi" %}selected{% endif %}>Edebi</option>
+            <option value="Gazete" {% if request.GET.category == "Gazete" %}selected{% endif %}>Gazete</option>
+            <!-- Diğer kategori seçenekleri buraya eklenir -->
+        </select>
+        <button type="submit" class="btn btn-danger">Filtrele</button>
+    </form>
+        
+    
 </form>
 </div>
 </div>
@@ -35,8 +49,9 @@
                             <!-- Post title-->
                             <h1 class="fw-bolder mb-1"><a href="/article/{{article.id}}">{{ article.title }}</h1></a>
                             <hr>
+                            
                             <!-- Post meta content-->
-                            <div class="text-muted fst-normal mb-2">{{ article.author.username }} tarafından {{ article.created_date }} tarihinde oluşturuldu.  </div>
+                            <div class="text-muted fst-normal mb-2">{{ article.category }} kategorisinde {{ article.author.username }} tarafından {{ article.created_date }} tarihinde oluşturuldu.  </div>
                             <!-- Post categories-->
                             <hr>
                         </header>
